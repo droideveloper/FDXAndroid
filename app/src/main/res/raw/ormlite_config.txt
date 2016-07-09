@@ -1,0 +1,60 @@
+#
+# generated on 2016/07/08 07:13:59
+#
+# --table-start--
+dataClass=org.fs.dx.entities.Element
+tableName=element
+# --table-fields-start--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=name
+columnName=name
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=org.fs.dx.entities.Molecule
+tableName=molecule
+# --table-fields-start--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=name
+columnName=name
+# --field-end--
+# --field-start--
+fieldName=price
+columnName=price
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=org.fs.dx.entities.Reference
+tableName=reference
+# --table-fields-start--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=moleculeId
+columnName=molecule_id
+# --field-end--
+# --field-start--
+fieldName=elementId
+columnName=element_id
+# --field-end--
+# --field-start--
+fieldName=percentage
+columnName=percentage
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################

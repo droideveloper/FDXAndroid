@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">∫dx</string>
+    <string name="default_hint">0.0</string>
+
+    <string name="undo">undo</string>
+    <string name="undo_element_text">Undo Element \"%s\"</string>
+
+    <string name="new_element_hint">Enter element name as \"H2O4\"</string>
+    <string name="new_element_empty_text_error">You should enter valid text</string>
+
+    <string name="undo_molecule_text">Undo Molecule \"%s\"</string>
+    <string name="undo_reference_text">Undo Reference \"%s\"</string>
+
+    <string name="name">Name:\t</string>
+    <string name="price">Price:\t</string>
+
+    <string name="nbr_text_error">You should enter valid number</string>
+
+    <string name="txt_hint">Enter text</string>
+    <string name="nbr_hint">Enter number</string>
+    <string name="percentage_hint">Enter percentage</string>
+    <!-- navigation title -->
+    <string name="formulas_title">Formulas</string>
+    <string name="elements_title">Elements</string>
+    <string name="molecules_title">Molecules</string>
+
+    <string name="drawer_open">drawer open</string>
+    <string name="drawer_close">drawer close</string>
+</resources>

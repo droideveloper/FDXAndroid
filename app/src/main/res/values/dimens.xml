@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="default_space">5dp</dimen>
+    <dimen name="medium_space">8dp</dimen>
+    <dimen name="large_space">16dp</dimen>
+
+    <dimen name="nav_min_height">180dp</dimen>
+    <dimen name="peek_height">75dp</dimen>
+    <dimen name="max_height">320dp</dimen>
+
+    <integer name="anim_duration">400</integer>
+    <integer name="fade_anim">150</integer>
+</resources>

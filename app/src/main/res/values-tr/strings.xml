@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_hint">0.0</string>
+
+    <string name="undo">Geri al</string>
+    <string name="undo_element_text">Elemanı geri al \"%s\"</string>
+
+    <string name="new_element_hint">\"H2O4\" şeklinde değer gir</string>
+    <string name="new_element_empty_text_error">Uygun yazı girmelisin</string>
+
+    <string name="undo_molecule_text">Molekülü geri al \"%s\"</string>
+    <string name="undo_reference_text">Referansı geri al \"%s\"</string>
+
+    <string name="name">İsim:\t</string>
+    <string name="price">Bedel:\t</string>
+
+    <string name="nbr_text_error">Uygun rakam girmelisin</string>
+
+    <string name="txt_hint">Yazı gir</string>
+    <string name="nbr_hint">Rakam gir</string>
+    <string name="percentage_hint">Yüzde gir</string>
+    <!-- navigation title -->
+    <string name="formulas_title">Formüller</string>
+    <string name="elements_title">Elemanlar</string>
+    <string name="molecules_title">Moleküller</string>
+
+    <string name="drawer_open">açık</string>
+    <string name="drawer_close">kapalı</string>
+</resources>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/default_space"
+    android:padding="@dimen/default_space"
+    android:layout_width="match_parent"
+    android:background="@drawable/bg_view"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/txtNameView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:layout_width="match_parent"
+        android:text="@string/app_name"
+        android:textStyle="italic"
+        android:ellipsize="end"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/txtTotalView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:hint="@string/default_hint"
+        android:gravity="end"
+        android:layout_marginTop="@dimen/default_space"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

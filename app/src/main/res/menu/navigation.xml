@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:checkableBehavior="single" >
+        <item
+            android:id="@+id/menuFormulas"
+            android:icon="@drawable/ic_formula"
+            android:title="@string/formulas_title" />
+
+        <item
+            android:id="@+id/menuMolecules"
+            android:icon="@drawable/ic_molecule"
+            android:title="@string/molecules_title" />
+
+        <item
+            android:id="@+id/menuElements"
+            android:icon="@drawable/ic_element"
+            android:title="@string/elements_title" />
+
+    </group>
+</menu>
