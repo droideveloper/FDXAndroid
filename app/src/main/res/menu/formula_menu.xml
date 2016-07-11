@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:support="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/showView"
+          android:icon="@drawable/ic_visibility_white_24dp"
+          support:showAsAction="ifRoom|collapseActionView"
+          android:title="@string/show_result" />
+
     <item android:id="@+id/clearView"
           android:icon="@drawable/ic_delete_white_24dp"
           support:showAsAction="ifRoom|collapseActionView"
-          android:title="@string/app_name" />
+          android:title="@string/clear_result" />
 </menu>

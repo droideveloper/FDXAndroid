@@ -46,7 +46,7 @@ public class ResultRecyclerViewHolder extends AbstractRecyclerViewHolder<Result>
             String sumStr = "$ " + sum;
             txtTotalView.setText(sumStr);
         } else {
-            String sum = String.format(Locale.getDefault(), "%.2f", result.getSum());
+            String sum = String.format(Locale.getDefault(), "%.4f", result.getSum());
             sum += " %";
             txtTotalView.setText(sum);
         }

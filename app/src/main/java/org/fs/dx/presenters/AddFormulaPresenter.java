@@ -34,15 +34,24 @@ import org.fs.dx.utilities.ChemistryUtility;
 import org.fs.dx.views.IAddFormulaView;
 import org.fs.dx.views.ISelectMoleculeView;
 import org.fs.dx.views.SelectMoleculeView;
+import org.fs.exception.AndroidException;
 import org.fs.util.Collections;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Fatih on 08/07/16.
@@ -130,6 +139,7 @@ public class AddFormulaPresenter extends AbstractPresenter<IAddFormulaView> impl
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
+            //clear adapters
             case R.id.clearView: {
                 if (resultRecyclerAdapter != null) {
                     resultRecyclerAdapter.clear();
@@ -139,6 +149,19 @@ public class AddFormulaPresenter extends AbstractPresenter<IAddFormulaView> impl
                 }
                 return true;
             }
+            //show resultSet
+            case R.id.showView: {
+                if (!view.isSheetShown()) {
+                    view.showSheet();
+                    Resources res = view.getContext().getResources();
+                    view.setPeekHeight(res.getDimensionPixelSize(R.dimen.peek_height));
+                } else {
+                    view.setPeekHeight(0);
+                    view.hideSheet();
+                }
+                return true;
+            }
+
             default: break;
         }
         return false;
@@ -212,17 +235,7 @@ public class AddFormulaPresenter extends AbstractPresenter<IAddFormulaView> impl
                     selectMoleculeView.show(fragmentManager, TAG_SELECT_MOLECULE);
                     break;
                 }
-                case R.id.showView: {
-                    if (!view.isSheetShown()) {
-                        view.showSheet();
-                        Resources res = view.getContext().getResources();
-                        view.setPeekHeight(res.getDimensionPixelSize(R.dimen.peek_height));
-                    } else {
-                        view.setPeekHeight(0);
-                        view.hideSheet();
-                    }
-                    break;
-                }
+                default: break;
             }
         }
     }
@@ -272,51 +285,79 @@ public class AddFormulaPresenter extends AbstractPresenter<IAddFormulaView> impl
 
     void calcResults() {
         if (view.isAvailable()) {
-            if (formulaRecyclerAdapter != null) {
-                List<Pair<Molecule, Double>> dataSet = formulaRecyclerAdapter.provideClone();
-                if (!Collections.isNullOrEmpty(dataSet)) {
-                    Map<String, Double> map = new HashMap<>();
-                    for (Pair<Molecule, Double> pair : dataSet) {
-                        try {
-                            List<Reference> references = dbManager.queryFor(pair.first);
-                            if (!Collections.isNullOrEmpty(references)) {
-                                for (Reference ref : references) {
-                                    Element element = dbManager.getElement(ref.getElementId());
-                                    if (map.containsKey(element.getName())) {
-                                        double current = map.get(element.getName());
-                                        current += toPercent(ref.getPercentage()) * pair.second;
-                                        map.put(element.getName(), current);
-                                    } else {
-                                        map.put(element.getName(), toPercent(ref.getPercentage()) * pair.second);
-                                    }
-                                }
-                            }
-                        } catch (SQLException sql) {
-                            sql.printStackTrace();
-                        }
-                        if (map.containsKey(TOTAL_STR)) {
-                            double current = map.get(TOTAL_STR);
-                            current += toPercent(pair.second) * pair.first.getPrice();
-                            map.put(TOTAL_STR, current);
-                        } else {
-                            map.put(TOTAL_STR, toPercent(pair.second) * pair.first.getPrice());
-                        }
-                    }
-                    //update ui according to data
-                    if (!map.isEmpty()) {
-                        if (resultRecyclerAdapter != null) {
-                            resultRecyclerAdapter.update(map);
-                        }
-                        Resources res = view.getContext().getResources();
-                        view.setPeekHeight(res.getDimensionPixelSize(R.dimen.peek_height));
-                    } else {
-                        view.setPeekHeight(0);
-                    }
-                } else {
-                    //hide view accordingly
-                    view.setPeekHeight(0);
-                }
-            }
+            final AtomicBoolean dataProvided = new AtomicBoolean(false);
+            //putting all into observable is just beautiful for making it work on background thread... priceless
+            Observable.just(formulaRecyclerAdapter)
+                      .flatMap(new Func1<FormulaRecyclerViewAdapter, Observable<SortedMap<String, Double>>>() {
+                          @Override public Observable<SortedMap<String, Double>> call(FormulaRecyclerViewAdapter recyclerViewAdapter) {
+                              if (resultRecyclerAdapter != null) {
+                                  List<Pair<Molecule, Double>> dataSet = recyclerViewAdapter.provideClone();
+                                  if (!Collections.isNullOrEmpty(dataSet)) {
+                                      SortedMap<String, Double> map = new TreeMap<>();
+                                      for (Pair<Molecule, Double> pair : dataSet) {
+                                          try {
+                                              List<Reference> references = dbManager.queryFor(pair.first);
+                                              if (!Collections.isNullOrEmpty(references)) {
+                                                  for (Reference ref : references) {
+                                                      Element element = dbManager.getElement(ref.getElementId());
+                                                      if (map.containsKey(element.getName())) {
+                                                          double current = map.get(element.getName());
+                                                          current += toPercent(ref.getPercentage()) * pair.second;
+                                                          map.put(element.getName(), current);
+                                                      } else {
+                                                          map.put(element.getName(), toPercent(ref.getPercentage()) * pair.second);
+                                                      }
+                                                  }
+                                              }
+                                          } catch (SQLException sql) {
+                                              sql.printStackTrace();
+                                          }
+                                          if (map.containsKey(TOTAL_STR)) {
+                                              double current = map.get(TOTAL_STR);
+                                              current += toPercent(pair.second) * pair.first.getPrice();
+                                              map.put(TOTAL_STR, current);
+                                          } else {
+                                              map.put(TOTAL_STR, toPercent(pair.second) * pair.first.getPrice());
+                                          }
+                                      }
+                                      return Observable.just(map);
+                                  }
+                              }
+                              return Observable.empty();
+                          }
+                      })
+                      .subscribeOn(Schedulers.io())
+                      .observeOn(AndroidSchedulers.mainThread())
+                      .subscribe(new Action1<SortedMap<String, Double>>() {
+                          @Override public void call(SortedMap<String, Double> dataSet) {
+                              dataProvided.set(true);
+                              if (!dataSet.isEmpty()) {
+                                  if (resultRecyclerAdapter != null) {
+                                      resultRecyclerAdapter.update(dataSet);
+                                  }
+                                  Resources res = view.getContext().getResources();
+                                  view.setPeekHeight(res.getDimensionPixelSize(R.dimen.peek_height));
+                              } else {
+                                  if (resultRecyclerAdapter != null) {
+                                      resultRecyclerAdapter.clear();//clean it up
+                                  }
+                                  view.setPeekHeight(0);
+                              }
+                          }
+                      }, new Action1<Throwable>() {
+                          @Override public void call(Throwable throwable) {
+                                throw new AndroidException(throwable);
+                          }
+                      }, new Action0() {
+                          @Override public void call() {
+                              if (!dataProvided.get()) {
+                                  if (resultRecyclerAdapter != null) {
+                                      resultRecyclerAdapter.clear();
+                                  }
+                                  view.setPeekHeight(0);
+                              }
+                          }
+                      });
         }
     }
 

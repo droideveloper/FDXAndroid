@@ -44,7 +44,6 @@ public class AddFormulaView extends AbstractFragment<IAddFormulaPresenter> imple
     private RecyclerView            resultRecyclerView;
     private View                    containerView;
     private FloatingActionButton    addView;
-    private FloatingActionButton    showView;
     private BottomSheetBehavior     bottomSheetBehavior;
 
     @Override public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,7 +90,6 @@ public class AddFormulaView extends AbstractFragment<IAddFormulaPresenter> imple
         formulaRecyclerView = ViewUtility.findViewById(view, R.id.formulaRecyclerView);
         resultRecyclerView = ViewUtility.findViewById(view, R.id.resultRecyclerView);
         addView = ViewUtility.findViewById(view, R.id.addView);
-        showView = ViewUtility.findViewById(view, R.id.showView);
         containerView = ViewUtility.findViewById(view, R.id.container);
         return view;
     }
@@ -120,7 +118,6 @@ public class AddFormulaView extends AbstractFragment<IAddFormulaPresenter> imple
         bottomSheetBehavior.setBottomSheetCallback(presenter.provideBottomSheetCallback());
 
         addView.setOnClickListener(presenter.provideViewClickListener());
-        showView.setOnClickListener(presenter.provideViewClickListener());
     }
 
     @Override public void setTitle(String str) {

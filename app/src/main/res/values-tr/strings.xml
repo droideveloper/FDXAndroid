@@ -26,4 +26,7 @@
 
     <string name="drawer_open">açık</string>
     <string name="drawer_close">kapalı</string>
+
+    <string name="show_result">Sonuçları göster</string>
+    <string name="clear_result">Sonuçları temizle</string>
 </resources>

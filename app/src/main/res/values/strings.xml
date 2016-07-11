@@ -26,4 +26,7 @@
 
     <string name="drawer_open">drawer open</string>
     <string name="drawer_close">drawer close</string>
+
+    <string name="show_result">Show results set</string>
+    <string name="clear_result">Clear results set</string>
 </resources>
