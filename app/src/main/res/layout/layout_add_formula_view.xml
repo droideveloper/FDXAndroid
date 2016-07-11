@@ -35,10 +35,9 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/resultRecyclerView"
-            android:layout_margin="@dimen/default_space"
             android:background="@color/navigationBackgroundColor"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/max_height" />
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
