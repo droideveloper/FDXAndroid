@@ -30,7 +30,8 @@ public interface IAddFormulaView extends IView {
     void showError(Snackbar error);
     void showUndo(Snackbar undo);
     void hideUndo(Snackbar undo);
-    void setPeekHeight(int peek);
+//    void setFirstTime(boolean firstTime);
+//    void setPeekHeight(int peek);
     void hideSheet();
     void showSheet();
 

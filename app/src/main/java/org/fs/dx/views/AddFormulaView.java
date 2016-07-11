@@ -46,9 +46,12 @@ public class AddFormulaView extends AbstractFragment<IAddFormulaPresenter> imple
     private FloatingActionButton    addView;
     private BottomSheetBehavior     bottomSheetBehavior;
 
+//    private boolean firstBehaviourTime;
+
     @Override public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+//       firstBehaviourTime = true;
     }
 
     @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -150,9 +153,19 @@ public class AddFormulaView extends AbstractFragment<IAddFormulaPresenter> imple
         return bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED;
     }
 
-    @Override public void setPeekHeight(int peek) {
-        bottomSheetBehavior.setPeekHeight(peek);
-    }
+//    @Override public void setPeekHeight(int peek) {
+//        //toolbar size appended since it needs to be updated
+//        if (firstBehaviourTime) {
+//            bottomSheetBehavior.setPeekHeight(peek + (toolbar != null ? toolbar.getHeight() : 0));
+//            firstBehaviourTime = false;
+//        } else {
+//            bottomSheetBehavior.setPeekHeight(peek);
+//        }
+//    }
+//
+//    @Override public void setFirstTime(boolean firstTime) {
+//        this.firstBehaviourTime = firstTime;
+//    }
 
     @Override public Toolbar getToolbar() {
         return toolbar;

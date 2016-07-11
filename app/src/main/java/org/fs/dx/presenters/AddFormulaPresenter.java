@@ -1,6 +1,5 @@
 package org.fs.dx.presenters;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
@@ -138,31 +137,35 @@ public class AddFormulaPresenter extends AbstractPresenter<IAddFormulaView> impl
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
-            //clear adapters
-            case R.id.clearView: {
-                if (resultRecyclerAdapter != null) {
-                    resultRecyclerAdapter.clear();
+        if (view.isAvailable()) {
+            switch (item.getItemId()) {
+                //clear adapters
+                case R.id.clearView: {
+                    if (resultRecyclerAdapter != null) {
+                        resultRecyclerAdapter.clear();
+                    }
+                    if (formulaRecyclerAdapter != null) {
+                        formulaRecyclerAdapter.clear();
+                    }
+                    //view.setFirstTime(true);
+                    return true;
                 }
-                if (formulaRecyclerAdapter != null) {
-                    formulaRecyclerAdapter.clear();
+                //show resultSet
+                case R.id.showView: {
+                    if (!view.isSheetShown()) {
+                        view.showSheet();
+                        //Resources res = view.getContext().getResources();
+                        //view.setPeekHeight(res.getDimensionPixelSize(R.dimen.peek_height));
+                    } else {
+                        //view.setPeekHeight(0);
+                        view.hideSheet();
+                    }
+                    return true;
                 }
-                return true;
-            }
-            //show resultSet
-            case R.id.showView: {
-                if (!view.isSheetShown()) {
-                    view.showSheet();
-                    Resources res = view.getContext().getResources();
-                    view.setPeekHeight(res.getDimensionPixelSize(R.dimen.peek_height));
-                } else {
-                    view.setPeekHeight(0);
-                    view.hideSheet();
-                }
-                return true;
-            }
 
-            default: break;
+                default:
+                    break;
+            }
         }
         return false;
     }
@@ -330,18 +333,21 @@ public class AddFormulaPresenter extends AbstractPresenter<IAddFormulaView> impl
                       .observeOn(AndroidSchedulers.mainThread())
                       .subscribe(new Action1<SortedMap<String, Double>>() {
                           @Override public void call(SortedMap<String, Double> dataSet) {
-                              dataProvided.set(true);
-                              if (!dataSet.isEmpty()) {
-                                  if (resultRecyclerAdapter != null) {
-                                      resultRecyclerAdapter.update(dataSet);
+                              if (view.isAvailable()) {
+                                  dataProvided.set(true);
+                                  if (!dataSet.isEmpty()) {
+                                      if (resultRecyclerAdapter != null) {
+                                          resultRecyclerAdapter.update(dataSet);
+                                      }
+                                      //Resources res = view.getContext().getResources();
+                                      //view.setPeekHeight(res.getDimensionPixelSize(R.dimen.peek_height));
+                                  } else {
+                                      if (resultRecyclerAdapter != null) {
+                                          resultRecyclerAdapter.clear();//clean it up
+                                          //view.setFirstTime(true);//set first time
+                                      }
+                                      //view.setPeekHeight(0);
                                   }
-                                  Resources res = view.getContext().getResources();
-                                  view.setPeekHeight(res.getDimensionPixelSize(R.dimen.peek_height));
-                              } else {
-                                  if (resultRecyclerAdapter != null) {
-                                      resultRecyclerAdapter.clear();//clean it up
-                                  }
-                                  view.setPeekHeight(0);
                               }
                           }
                       }, new Action1<Throwable>() {
@@ -350,11 +356,14 @@ public class AddFormulaPresenter extends AbstractPresenter<IAddFormulaView> impl
                           }
                       }, new Action0() {
                           @Override public void call() {
-                              if (!dataProvided.get()) {
-                                  if (resultRecyclerAdapter != null) {
-                                      resultRecyclerAdapter.clear();
+                              if (view.isAvailable()) {
+                                  if (!dataProvided.get()) {
+                                      if (resultRecyclerAdapter != null) {
+                                          resultRecyclerAdapter.clear();
+                                          //view.setFirstTime(true);//set first time
+                                      }
+                                      //view.setPeekHeight(0);
                                   }
-                                  view.setPeekHeight(0);
                               }
                           }
                       });

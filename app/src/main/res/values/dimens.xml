@@ -9,5 +9,5 @@
     <dimen name="max_height">320dp</dimen>
 
     <integer name="anim_duration">400</integer>
-    <integer name="fade_anim">550</integer>
+    <integer name="fade_anim">390</integer>
 </resources>
