@@ -62,6 +62,9 @@ public class NewMoleculePresenter extends AbstractPresenter<INewMoleculeView> im
     public final static int RESULT_CANCEL = 0x01;
     public final static int RESULT_OK     = 0x02;
 
+    private int index;
+    private boolean refCreate;
+
     final ITextInputView.Callback textCallback = new ITextInputView.Callback() {
         @Override public void onSuccess(String str) {
             view.setTextName(str);
@@ -96,7 +99,15 @@ public class NewMoleculePresenter extends AbstractPresenter<INewMoleculeView> im
                 dbManager.update(reference);
             }
             if(recyclerAdapter != null) {
-                recyclerAdapter.appendData(reference, false);
+                if (refCreate) {
+                    recyclerAdapter.appendData(reference, false);
+                } else {
+                    if(index >= 0) {
+                        //to be more safe check position is positive or 0
+                        recyclerAdapter.notifyItemChanged(index);
+                    }
+                    index = -1;//set empty index for god's sake
+                }
             }
         }
 
@@ -135,6 +146,7 @@ public class NewMoleculePresenter extends AbstractPresenter<INewMoleculeView> im
                 }
                 //add
                 case R.id.addView: {
+                    refCreate = true;
                     SelectElementView selectElementView = new SelectElementView();
                     selectElementView.setCallback(selectedElementCallback);
                     selectElementView.setDatabaseManager(dbManager);
@@ -306,6 +318,9 @@ public class NewMoleculePresenter extends AbstractPresenter<INewMoleculeView> im
     }
 
     @Override public void onSelected(Reference reference) {
+        refCreate = false;
+        index = recyclerAdapter.positionOf(reference);
+
         SelectElementView selectElementView = new SelectElementView();
         selectElementView.setCallback(selectedElementCallback);
         selectElementView.setDatabaseManager(dbManager);
