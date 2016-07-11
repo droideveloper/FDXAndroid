@@ -1,5 +1,6 @@
 package org.fs.dx.holders;
 
+import android.support.v4.content.res.ResourcesCompat;
 import android.text.SpannableString;
 import android.view.View;
 import android.widget.TextView;
@@ -45,10 +46,13 @@ public class ResultRecyclerViewHolder extends AbstractRecyclerViewHolder<Result>
             String sum = String.format(Locale.getDefault(), "%.2f", result.getSum());
             String sumStr = "$ " + sum;
             txtTotalView.setText(sumStr);
+            int color = ResourcesCompat.getColor(itemView.getContext().getResources(), R.color.colorAccent, itemView.getContext().getTheme());
+            txtTotalView.setTextColor(color);
         } else {
             String sum = String.format(Locale.getDefault(), "%.4f", result.getSum());
             sum += " %";
             txtTotalView.setText(sum);
+            txtTotalView.setTextColor(txtNameView.getCurrentTextColor());//use it from others not to change it
         }
     }
 
