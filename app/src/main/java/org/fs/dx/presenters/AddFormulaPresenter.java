@@ -1,10 +1,12 @@
 package org.fs.dx.presenters;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -92,9 +94,13 @@ public class AddFormulaPresenter extends AbstractPresenter<IAddFormulaView> impl
                         String str = String.format(Locale.getDefault(), view.getContext().getString(R.string.undo_molecule_text), pair.first.getName());
                         SpannableString strTitle = ChemistryUtility.toChemistryText(str);
                         SpannableString strAction = new SpannableString(view.getContext().getString(R.string.undo));
-                        strAction.setSpan(new ImageSpan(view.getContext(), R.drawable.ic_undo_white_24dp),
-                                          strAction.length() - 1,
-                                          strAction.length(),
+
+                        Drawable d = ResourcesCompat.getDrawable(view.getContext().getResources(),
+                                                                 R.drawable.ic_undo_white_24dp,
+                                                                 view.getContext().getTheme());
+
+                        strAction.setSpan(new ImageSpan(d, ImageSpan.ALIGN_BASELINE),
+                                          0, 1,
                                           Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                         final Snackbar swipeShow = Snackbar.make(view.viewRoot(), strTitle, Snackbar.LENGTH_LONG);
@@ -102,6 +108,10 @@ public class AddFormulaPresenter extends AbstractPresenter<IAddFormulaView> impl
                             @Override public void onClick(View v) {
                                 if (view.isAvailable()) {
                                     view.hideUndo(swipeShow);
+                                    //there is bug that cause this
+                                    if (view.isSheetShown()) {
+                                        view.hideSheet();
+                                    }
                                     formulaRecyclerAdapter.appendAt(pair, position);
                                     //calculate
                                     calcResults();

@@ -31,6 +31,7 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
+        android:fitsSystemWindows="true"
         design:layout_behavior="@string/bottom_sheet_behavior"
         android:layout_height="match_parent">
 
